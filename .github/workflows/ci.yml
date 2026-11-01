@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  # Thin LTO plus parallel codegen has OOM-killed small runners, so keep the
+  # build single-job and shrink debug info rather than risking a flaky CI.
+  CARGO_BUILD_JOBS: 1
+  CARGO_INCREMENTAL: 0
+  RUST_BACKTRACE: 1
+
+jobs:
+  check:
+    name: fmt, clippy, test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install GTK and build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgtk-4-dev \
+            libgtk4-layer-shell-dev \
+            libpango1.0-dev \
+            libglib2.0-dev \
+            pkg-config
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Format
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Test
+        run: cargo test --all-features
+
+      - name: Build without layer-shell
+        # The overlay must still compile on systems that do not ship
+        # gtk4-layer-shell; that path falls back to a plain Wayland toplevel.
+        run: cargo check --no-default-features
+
+  freebsd:
+    name: FreeBSD build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build in a FreeBSD VM
+        uses: cross-platform-actions/action@v0.26.0
+        with:
+          operating_system: freebsd
+          version: "14.2"
+          architecture: x86_64
+          run: |
+            sudo pkg install -y rust gtk4 pango pkgconf
+            cargo build --no-default-features
