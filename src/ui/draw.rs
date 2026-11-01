@@ -32,13 +32,7 @@ pub struct ViewData<'a> {
     pub high_contrast: bool,
 }
 
-pub fn draw(
-    kind: WidgetKind,
-    cr: &Context,
-    width: f64,
-    height: f64,
-    view: &ViewData<'_>,
-) {
+pub fn draw(kind: WidgetKind, cr: &Context, width: f64, height: f64, view: &ViewData<'_>) {
     let _ = cr.save();
     cr.set_operator(cairo::Operator::Source);
     cr.set_source_rgba(0.0, 0.0, 0.0, 0.0);
@@ -208,11 +202,14 @@ fn fit_size(
         return size_pt;
     }
     let by_width = if width > 0.0 { rect.width / width } else { 1.0 };
-    let by_height = if height > 0.0 { rect.height / height } else { 1.0 };
+    let by_height = if height > 0.0 {
+        rect.height / height
+    } else {
+        1.0
+    };
     let scale = by_width.min(by_height).min(1.0) * 0.99;
     (size_pt * scale).max(6.0)
 }
-
 
 fn draw_centred_line(
     cr: &Context,
@@ -549,7 +546,13 @@ fn draw_glass_text(
     let body = cairo::LinearGradient::new(0.0, y, 0.0, y + height);
     body.add_color_stop_rgba(0.00, face_top.r, face_top.g, face_top.b, 0.97);
     body.add_color_stop_rgba(0.36, face_top.r, face_top.g, face_top.b, 0.93);
-    body.add_color_stop_rgba(0.74, colour.lighten(0.62).r, colour.lighten(0.62).g, colour.lighten(0.62).b, 0.90);
+    body.add_color_stop_rgba(
+        0.74,
+        colour.lighten(0.62).r,
+        colour.lighten(0.62).g,
+        colour.lighten(0.62).b,
+        0.90,
+    );
     body.add_color_stop_rgba(1.00, face_low.r, face_low.g, face_low.b, 0.92);
     cr.set_source(&body).ok();
     cr.fill().ok();

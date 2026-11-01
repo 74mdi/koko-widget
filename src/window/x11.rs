@@ -18,9 +18,7 @@ use x11rb::{
     wrapper::ConnectionExt as WrapperConnectionExt,
 };
 
-use crate::{
-    window::{DragPlacement, Placement, select_monitor},
-};
+use crate::window::{DragPlacement, Placement, select_monitor};
 
 unsafe extern "C" {
     fn gdk_x11_surface_get_xid(surface: *mut c_void) -> c_ulong;

@@ -839,24 +839,34 @@ impl UiController {
         for window in self.windows.all() {
             let layout = self.state.borrow().layout(window.kind);
             if let Some(buttons) = &window.buttons {
-                let move_button =
-                    |button: &gtk::Button, rect: Rect, show: bool, sensitive: bool| {
-                        button.set_visible(show);
-                        button.set_sensitive(sensitive);
-                        window.fixed.move_(button, rect.x, rect.y);
-                        button.set_size_request(
-                            layout::CONTROL_SIZE as i32,
-                            layout::CONTROL_SIZE as i32,
-                        );
-                    };
+                let move_button = |button: &gtk::Button,
+                                   rect: Rect,
+                                   show: bool,
+                                   sensitive: bool| {
+                    button.set_visible(show);
+                    button.set_sensitive(sensitive);
+                    window.fixed.move_(button, rect.x, rect.y);
+                    button
+                        .set_size_request(layout::CONTROL_SIZE as i32, layout::CONTROL_SIZE as i32);
+                };
                 move_button(
                     &buttons.previous,
                     layout.previous_hit,
                     visible && layout.previous_alpha > 0.03,
                     visible && enabled.0,
                 );
-                move_button(&buttons.play, layout.play_hit, visible, visible && enabled.1);
-                move_button(&buttons.next, layout.next_hit, visible, visible && enabled.2);
+                move_button(
+                    &buttons.play,
+                    layout.play_hit,
+                    visible,
+                    visible && enabled.1,
+                );
+                move_button(
+                    &buttons.next,
+                    layout.next_hit,
+                    visible,
+                    visible && enabled.2,
+                );
                 if !buttons.play.has_focus() {
                     buttons
                         .play
@@ -1693,8 +1703,8 @@ impl UiController {
                 .and_then(|snap| snap.duration_seconds());
             duration.map(|duration| {
                 let layout = state.layout(kind);
-                let fraction = ((x - layout.progress_track.x) / layout.progress_track.width)
-                    .clamp(0.0, 1.0);
+                let fraction =
+                    ((x - layout.progress_track.x) / layout.progress_track.width).clamp(0.0, 1.0);
                 fraction * duration
             })
         };
@@ -1726,8 +1736,8 @@ impl UiController {
                 .as_ref()
                 .and_then(|snap| snap.duration_seconds());
             let layout = state.layout(kind);
-            let fraction = ((x - layout.progress_track.x) / layout.progress_track.width)
-                .clamp(0.0, 1.0);
+            let fraction =
+                ((x - layout.progress_track.x) / layout.progress_track.width).clamp(0.0, 1.0);
             (duration, fraction)
         };
         if let Some(duration) = duration {
@@ -1779,9 +1789,7 @@ impl UiController {
         }
         let control_focused = self.windows.media().is_some_and(|window| {
             window.buttons.as_ref().is_some_and(|buttons| {
-                buttons.play.has_focus()
-                    || buttons.previous.has_focus()
-                    || buttons.next.has_focus()
+                buttons.play.has_focus() || buttons.previous.has_focus() || buttons.next.has_focus()
             })
         });
         let only_shift = modifiers

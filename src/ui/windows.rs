@@ -191,7 +191,10 @@ impl WidgetWindow {
 
     pub fn begin_drag(&self, config: &Config) -> bool {
         let placement = self.placement(config);
-        let started = self.backend.borrow_mut().begin_drag(&self.window, &placement);
+        let started = self
+            .backend
+            .borrow_mut()
+            .begin_drag(&self.window, &placement);
         if started {
             *self.dragging.borrow_mut() = true;
             self.set_cursor("grabbing");
@@ -355,13 +358,7 @@ pub fn draw_window(
     height: i32,
     view: &ViewData<'_>,
 ) {
-    draw::draw(
-        window.kind,
-        cr,
-        f64::from(width),
-        f64::from(height),
-        view,
-    );
+    draw::draw(window.kind, cr, f64::from(width), f64::from(height), view);
 }
 
 fn control_button(label: &str) -> gtk::Button {
@@ -391,9 +388,15 @@ pub fn clamp_spot(spot: &mut crate::config::WidgetSpot, max_x: i32, max_y: i32) 
 }
 
 /// Convenience for the controller: the union of every card rectangle.
-pub fn input_rects(windows: &[Rc<WidgetWindow>], layouts: &[(WidgetKind, FrameLayout)]) -> Vec<Rect> {
+pub fn input_rects(
+    windows: &[Rc<WidgetWindow>],
+    layouts: &[(WidgetKind, FrameLayout)],
+) -> Vec<Rect> {
     let _ = windows;
-    layouts.iter().map(|(_, layout)| layout.input_rect()).collect()
+    layouts
+        .iter()
+        .map(|(_, layout)| layout.input_rect())
+        .collect()
 }
 
 /// Log a summary of the current window set once, at startup.

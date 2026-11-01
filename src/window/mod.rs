@@ -152,8 +152,7 @@ fn auto_origin(config: &Config, kind: WidgetKind, canvas_height: f64) -> (i32, i
         .iter()
         .map(|entry| layout::card_size(*entry, &config.widgets).0)
         .sum::<f64>()
-        + config.widgets.gap.max(0.0)
-            * config.widgets.active().len().saturating_sub(1) as f64;
+        + config.widgets.gap.max(0.0) * config.widgets.active().len().saturating_sub(1) as f64;
 
     let row_left = match config.position.mode {
         PositionMode::Center | PositionMode::TopCenter | PositionMode::BottomCenter => {
@@ -353,11 +352,7 @@ impl WindowBackend {
     }
 
     /// Begin a pointer drag from the placement this window currently has.
-    pub fn begin_drag(
-        &mut self,
-        window: &gtk::ApplicationWindow,
-        placement: &Placement,
-    ) -> bool {
+    pub fn begin_drag(&mut self, window: &gtk::ApplicationWindow, placement: &Placement) -> bool {
         match self.kind {
             #[cfg(feature = "layer-shell")]
             BackendKind::LayerShell => {
@@ -388,10 +383,7 @@ impl WindowBackend {
                 }
                 true
             }
-            BackendKind::X11 => self
-                .x11
-                .as_mut()
-                .is_some_and(|x11| x11.drag_by(dx, dy)),
+            BackendKind::X11 => self.x11.as_mut().is_some_and(|x11| x11.drag_by(dx, dy)),
             _ => false,
         }
     }

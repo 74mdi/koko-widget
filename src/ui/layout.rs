@@ -180,7 +180,10 @@ pub fn card_size(kind: WidgetKind, widgets: &Widgets) -> (f64, f64) {
 /// Canvas size for one card: the card plus its transparent shadow margin.
 pub fn canvas_size(kind: WidgetKind, widgets: &Widgets) -> (f64, f64) {
     let (width, height) = card_size(kind, widgets);
-    (width + HORIZONTAL_MARGIN * 2.0, height + VERTICAL_MARGIN * 2.0)
+    (
+        width + HORIZONTAL_MARGIN * 2.0,
+        height + VERTICAL_MARGIN * 2.0,
+    )
 }
 
 /// Canvas size for a whole configuration, used for coarse placement maths.
@@ -191,7 +194,10 @@ pub fn row_canvas_size(config: &Config) -> (f64, f64) {
         .iter()
         .map(|kind| card_size(*kind, &config.widgets))
         .fold((0.0_f64, 0.0_f64), |(w, h), (cw, ch)| (w + cw, h.max(ch)));
-    (width + HORIZONTAL_MARGIN * 2.0, height + VERTICAL_MARGIN * 2.0)
+    (
+        width + HORIZONTAL_MARGIN * 2.0,
+        height + VERTICAL_MARGIN * 2.0,
+    )
 }
 
 /// How many logical pixels a card occupies in the row, used for auto-placement.

@@ -365,10 +365,7 @@ impl WidgetPositions {
     }
 
     pub fn any(&self) -> bool {
-        self.media.is_some()
-            || self.clock.is_some()
-            || self.date.is_some()
-            || self.text.is_some()
+        self.media.is_some() || self.clock.is_some() || self.date.is_some() || self.text.is_some()
     }
 }
 
