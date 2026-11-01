@@ -1,0 +1,28 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=KOKO WIDGET
+GenericName=Floating Music Overlay
+Comment=Native Liquid Glass music overlay for MPRIS players
+Exec=koko-widget
+TryExec=koko-widget
+Icon=io.github.kokowidget.KokoWidget
+Terminal=false
+Categories=AudioVideo;Player;
+Keywords=music;player;overlay;widget;mpris;spotify;vlc;
+StartupNotify=false
+StartupWMClass=io.github.kokowidget.KokoWidget
+X-GNOME-UsesNotifications=false
+Actions=Show;Settings;Hide;
+
+[Desktop Action Show]
+Name=Show Widget
+Exec=koko-widget --show
+
+[Desktop Action Settings]
+Name=Settings
+Exec=koko-widget --settings
+
+[Desktop Action Hide]
+Name=Hide Widget
+Exec=koko-widget --hide

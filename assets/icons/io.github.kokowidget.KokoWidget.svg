@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2242"/>
+      <stop offset="0.55" stop-color="#15121f"/>
+      <stop offset="1" stop-color="#08070d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.28" cy="0.18" r="0.78">
+      <stop offset="0" stop-color="#715cff" stop-opacity="0.42"/>
+      <stop offset="0.65" stop-color="#715cff" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#715cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="0.4" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.13"/>
+    </linearGradient>
+    <linearGradient id="art" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b7cf6"/>
+      <stop offset="0.55" stop-color="#6673d9"/>
+      <stop offset="1" stop-color="#3aa6a0"/>
+    </linearGradient>
+    <linearGradient id="artShade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="0.6" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#09070f" stop-opacity="0.25"/>
+    </linearGradient>
+    <clipPath id="artClip">
+      <rect x="72" y="190" width="104" height="104" rx="24"/>
+    </clipPath>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="pillShadow" x="-20%" y="-40%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <rect x="18" y="18" width="476" height="476" rx="110" fill="url(#bg)" filter="url(#shadow)"/>
+  <rect x="18" y="18" width="476" height="476" rx="110" fill="url(#glow)"/>
+  <rect x="18" y="18" width="476" height="476" rx="110" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="2"/>
+
+  <g filter="url(#pillShadow)">
+    <rect x="56" y="183" width="400" height="142" rx="64" fill="#f7f3ff" fill-opacity="0.10"/>
+    <rect x="56" y="183" width="400" height="142" rx="64" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.30" stroke-width="1.5"/>
+    <rect x="56" y="183" width="400" height="50" rx="25" fill="#ffffff" fill-opacity="0.055"/>
+  </g>
+
+  <g clip-path="url(#artClip)">
+    <rect x="72" y="190" width="104" height="104" fill="url(#art)"/>
+    <rect x="72" y="190" width="104" height="104" fill="url(#artShade)"/>
+    <circle cx="138" cy="240" r="34" fill="#0c0a13" fill-opacity="0.48"/>
+    <circle cx="138" cy="240" r="21" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="138" cy="240" r="5" fill="#ffffff" fill-opacity="0.58"/>
+  </g>
+  <rect x="72" y="190" width="104" height="104" rx="24" fill="none" stroke="#ffffff" stroke-opacity="0.24" stroke-width="1.5"/>
+
+  <rect x="196" y="220" width="148" height="14" rx="7" fill="#ffffff" fill-opacity="0.94"/>
+  <rect x="196" y="249" width="91" height="10" rx="5" fill="#ffffff" fill-opacity="0.50"/>
+
+  <path d="M 357 221 L 389 252 L 357 283 Z" fill="#ffffff" fill-opacity="0.97" stroke="#ffffff" stroke-opacity="0.97" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="399" y="220" width="9" height="57" rx="4.5" fill="#ffffff" fill-opacity="0.82"/>
+
+  <path d="M 86 300 C 150 340 292 356 430 318" fill="none" stroke="#ffffff" stroke-opacity="0.055" stroke-width="2"/>
+</svg>

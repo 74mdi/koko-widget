@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=KOKO WIDGET
+Comment=Floating music overlay
+Exec=koko-widget --start-hidden
+Icon=io.github.kokowidget.KokoWidget
+Terminal=false
+Categories=AudioVideo;Player;
+X-GNOME-Autostart-enabled=true
+X-KOKO-WIDGET-OWNED=true
