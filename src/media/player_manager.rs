@@ -210,8 +210,10 @@ mod tests {
 
     #[test]
     fn preferred_player_wins_among_playing_players() {
-        let mut config = MediaConfig::default();
-        config.preferred_player = Some("vlc".into());
+        let config = MediaConfig {
+            preferred_player: Some("vlc".into()),
+            ..MediaConfig::default()
+        };
         let candidates = vec![
             candidate("vlc", "VLC", PlaybackStatus::Playing, 1, 10),
             candidate("spotify", "Spotify", PlaybackStatus::Playing, 2, 7),
@@ -222,8 +224,10 @@ mod tests {
 
     #[test]
     fn preferred_player_is_used_when_paused() {
-        let mut config = MediaConfig::default();
-        config.preferred_player = Some("Strawberry".into());
+        let config = MediaConfig {
+            preferred_player: Some("Strawberry".into()),
+            ..MediaConfig::default()
+        };
         let candidates = vec![
             candidate("vlc", "VLC", PlaybackStatus::Stopped, 0, 10),
             candidate("strawberry", "Strawberry", PlaybackStatus::Paused, 0, 2),
@@ -234,8 +238,10 @@ mod tests {
 
     #[test]
     fn priority_list_breaks_ties() {
-        let mut config = MediaConfig::default();
-        config.player_priority = vec!["vlc".into(), "spotify".into()];
+        let config = MediaConfig {
+            player_priority: vec!["vlc".into(), "spotify".into()],
+            ..MediaConfig::default()
+        };
         let candidates = vec![
             candidate("spotify", "Spotify", PlaybackStatus::Paused, 0, 50),
             candidate("vlc", "VLC", PlaybackStatus::Paused, 0, 10),
@@ -271,9 +277,11 @@ mod tests {
 
     #[test]
     fn auto_select_off_keeps_current_player() {
-        let mut config = MediaConfig::default();
-        config.auto_select = false;
-        config.preferred_player = Some("vlc".into());
+        let config = MediaConfig {
+            auto_select: false,
+            preferred_player: Some("vlc".into()),
+            ..MediaConfig::default()
+        };
         let candidates = vec![
             candidate("current", "Current", PlaybackStatus::Paused, 0, 1),
             candidate("vlc", "VLC", PlaybackStatus::Playing, 5, 5),

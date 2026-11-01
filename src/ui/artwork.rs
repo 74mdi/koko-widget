@@ -122,6 +122,7 @@ fn layer_from_decoded(decoded: &DecodedArtwork) -> cairo::Result<ArtworkLayer> {
     surface.mark_dirty();
     surface.flush();
     Ok(ArtworkLayer {
+        #[allow(clippy::arc_with_non_send_sync)]
         surface: Arc::new(surface),
         accent: decoded.accent,
     })

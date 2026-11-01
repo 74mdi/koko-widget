@@ -17,9 +17,16 @@ use crate::{
     utils::{config_file, format_hex_color, parse_hex_color},
 };
 
+/// Callback used to refresh the player list while the window is open.
+type PlayersCallback = Box<dyn Fn(&[PlayerInfo])>;
+
+/// Rebuild hook for the widget order list, stored so the list can be redrawn
+/// after a toggle without threading a new closure through every control.
+type RebuildHook = Rc<dyn Fn()>;
+
 pub struct SettingsHandle {
     pub window: gtk::ApplicationWindow,
-    update_players: Box<dyn Fn(&[PlayerInfo])>,
+    update_players: PlayersCallback,
 }
 
 impl SettingsHandle {
@@ -669,7 +676,7 @@ pub fn open(
     let widgets = section("Widgets");
     widgets_page.append(&widgets.container);
 
-    let order_rebuild_slot: Rc<RefCell<Option<Rc<dyn Fn()>>>> = Rc::new(RefCell::new(None));
+    let order_rebuild_slot: Rc<RefCell<Option<RebuildHook>>> = Rc::new(RefCell::new(None));
     let enabled_box = gtk::Box::new(gtk::Orientation::Vertical, 4);
     enabled_box.set_halign(gtk::Align::Fill);
     enabled_box.set_hexpand(true);

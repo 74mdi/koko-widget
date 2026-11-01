@@ -263,12 +263,13 @@ impl WindowBackend {
     /// Finish backend setup after GTK has realized the native surface but before
     /// presenting the window.
     pub fn after_realize(&mut self, window: &gtk::ApplicationWindow, _placement: &Placement) {
-        if self.kind == BackendKind::X11 && !self.x11_attached {
-            if let Some(x11) = self.x11.as_mut() {
-                match x11.attach(window) {
-                    Ok(()) => self.x11_attached = true,
-                    Err(error) => warn!(%error, "could not attach to the X11 window"),
-                }
+        if self.kind == BackendKind::X11
+            && !self.x11_attached
+            && let Some(x11) = self.x11.as_mut()
+        {
+            match x11.attach(window) {
+                Ok(()) => self.x11_attached = true,
+                Err(error) => warn!(%error, "could not attach to the X11 window"),
             }
         }
     }
@@ -280,18 +281,18 @@ impl WindowBackend {
     /// Called after the window has been mapped. X11 window managers commonly
     /// ignore a pre-map ConfigureRequest, so positioning is repeated here.
     pub fn after_map(&mut self, window: &gtk::ApplicationWindow, placement: &Placement) {
-        if self.kind == BackendKind::X11 {
-            if let Some(x11) = self.x11.as_mut() {
-                if !self.x11_attached {
-                    if let Err(error) = x11.attach(window) {
-                        warn!(%error, "could not attach to the X11 window after mapping");
-                        return;
-                    }
-                    self.x11_attached = true;
+        if self.kind == BackendKind::X11
+            && let Some(x11) = self.x11.as_mut()
+        {
+            if !self.x11_attached {
+                if let Err(error) = x11.attach(window) {
+                    warn!(%error, "could not attach to the X11 window after mapping");
+                    return;
                 }
-                if let Err(error) = x11.reposition(window, placement) {
-                    warn!(%error, "could not position the X11 overlay");
-                }
+                self.x11_attached = true;
+            }
+            if let Err(error) = x11.reposition(window, placement) {
+                warn!(%error, "could not position the X11 overlay");
             }
         }
     }
@@ -306,14 +307,14 @@ impl WindowBackend {
                 }
             }
             BackendKind::X11 => {
-                if let Some(x11) = self.x11.as_mut() {
-                    if self.x11_attached {
-                        if let Err(error) = x11.attach(window) {
-                            warn!(%error, "could not update X11 window properties");
-                        }
-                        if let Err(error) = x11.reposition(window, placement) {
-                            warn!(%error, "could not reposition X11 overlay");
-                        }
+                if let Some(x11) = self.x11.as_mut()
+                    && self.x11_attached
+                {
+                    if let Err(error) = x11.attach(window) {
+                        warn!(%error, "could not update X11 window properties");
+                    }
+                    if let Err(error) = x11.reposition(window, placement) {
+                        warn!(%error, "could not reposition X11 overlay");
                     }
                 }
             }
@@ -436,9 +437,7 @@ pub fn select_monitor(selector: Option<&str>) -> Option<gtk::gdk::Monitor> {
     if count == 0 {
         return None;
     }
-    let Some(selector) = selector.map(str::trim).filter(|value| !value.is_empty()) else {
-        return None;
-    };
+    let selector = selector.map(str::trim).filter(|value| !value.is_empty())?;
     if selector.eq_ignore_ascii_case("primary") || selector.eq_ignore_ascii_case("first") {
         return monitors.item(0).and_downcast::<gtk::gdk::Monitor>();
     }

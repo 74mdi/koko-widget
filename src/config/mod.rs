@@ -838,10 +838,10 @@ impl Config {
         {
             spot.x = spot.x.clamp(-20_000, 20_000);
             spot.y = spot.y.clamp(-20_000, 20_000);
-            if let Some(display) = spot.display.as_ref() {
-                if display.trim().is_empty() {
-                    spot.display = None;
-                }
+            if let Some(display) = spot.display.as_ref()
+                && display.trim().is_empty()
+            {
+                spot.display = None;
             }
         }
 
@@ -1072,13 +1072,15 @@ mod tests {
 
     #[test]
     fn widget_order_is_preserved_and_deduplicated() {
-        let mut widgets = Widgets::default();
-        widgets.order = vec![
-            WidgetKind::Date,
-            WidgetKind::Media,
-            WidgetKind::Date,
-            WidgetKind::Clock,
-        ];
+        let widgets = Widgets {
+            order: vec![
+                WidgetKind::Date,
+                WidgetKind::Media,
+                WidgetKind::Date,
+                WidgetKind::Clock,
+            ],
+            ..Widgets::default()
+        };
         assert_eq!(
             widgets.active(),
             vec![WidgetKind::Date, WidgetKind::Media, WidgetKind::Clock]

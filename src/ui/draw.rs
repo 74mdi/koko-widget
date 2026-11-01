@@ -211,6 +211,7 @@ fn fit_size(
     (size_pt * scale).max(6.0)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn draw_centred_line(
     cr: &Context,
     text: &str,

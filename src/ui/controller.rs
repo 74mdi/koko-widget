@@ -1159,10 +1159,10 @@ impl UiController {
         }
         let new_pin = config.behavior.pin_expanded;
         self.state.borrow_mut().config = config.clone();
-        if old_widgets != config.widgets {
-            if let Err(error) = self.sync_windows() {
-                warn!(%error, "could not create widget windows");
-            }
+        if old_widgets != config.widgets
+            && let Err(error) = self.sync_windows()
+        {
+            warn!(%error, "could not create widget windows");
         }
         if old_position != config.position || old_widgets != config.widgets {
             self.resize_canvas(&config);
@@ -1551,10 +1551,10 @@ impl UiController {
         debug!(?kind, "pointer left widget");
         if let Some(window) = self.windows.get(kind) {
             window.set_press_origin(None);
-            if window.is_dragging() {
-                if let Some(placement) = window.end_drag() {
-                    self.persist_drag(kind, placement);
-                }
+            if window.is_dragging()
+                && let Some(placement) = window.end_drag()
+            {
+                self.persist_drag(kind, placement);
             }
             window.set_cursor("grab");
             window.queue_draw();

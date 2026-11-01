@@ -573,9 +573,11 @@ mod tests {
 
     #[test]
     fn accent_adapts_to_artwork_only_when_enabled() {
-        let mut appearance = Appearance::default();
-        appearance.accent = "#ff0000".into();
-        appearance.adaptive_accent = true;
+        let mut appearance = Appearance {
+            accent: "#ff0000".into(),
+            adaptive_accent: true,
+            ..Appearance::default()
+        };
         let adaptive = Palette::derive(&appearance, Some([0.0, 1.0, 0.0]), true);
         assert!(adaptive.accent.g > adaptive.accent.r);
         appearance.adaptive_accent = false;
@@ -594,8 +596,10 @@ mod tests {
 
     #[test]
     fn opacity_respects_user_setting_and_glass_toggle() {
-        let mut appearance = Appearance::default();
-        appearance.opacity = 0.84;
+        let mut appearance = Appearance {
+            opacity: 0.84,
+            ..Appearance::default()
+        };
         let blur = Palette::derive(&appearance, None, true);
         assert!(blur.base_alpha < 0.93);
         appearance.glass = false;
