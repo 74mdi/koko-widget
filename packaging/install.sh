@@ -31,6 +31,10 @@ uninstall() {
     # Autostart is owned by the app's settings toggle, but remove a stale copy
     # so an uninstall does not leave a launcher pointing at nothing.
     rm -f "${XDG_CONFIG_HOME:-$HOME/.config}/autostart/$APP_ID.desktop"
+    # update-desktop-database and gtk-update-icon-cache leave their own cache
+    # files behind; drop them when nothing else lives in the directory.
+    rm -f "$APP_DIR/mimeinfo.cache"
+    rmdir "$APP_DIR" 2>/dev/null || true
     refresh_caches
     say "Done."
 }
@@ -74,9 +78,12 @@ install -d "$BIN_DIR" "$APP_DIR"
 install -m 755 "$BINARY" "$BIN_DIR/$BIN"
 
 # The desktop entry ships with Exec=koko-widget, which relies on ~/.local/bin
-# being on PATH. Rewrite it to the absolute path so a launcher click works even
-# when the session was started before the directory existed.
-sed "s|^Exec=$BIN\$|Exec=$BIN_DIR/$BIN|; s|^TryExec=$BIN\$|TryExec=$BIN_DIR/$BIN|" \
+# being on PATH. Rewrite every Exec and TryExec line — including the Show,
+# Settings and Hide actions — to the absolute path so a launcher click works
+# even when the session was started before the directory existed.
+sed -e "s|^Exec=$BIN |Exec=$BIN_DIR/$BIN |" \
+    -e "s|^Exec=$BIN\$|Exec=$BIN_DIR/$BIN|" \
+    -e "s|^TryExec=$BIN\$|TryExec=$BIN_DIR/$BIN|" \
     "$HERE/data/$APP_ID.desktop" >"$APP_DIR/$APP_ID.desktop"
 chmod 644 "$APP_DIR/$APP_ID.desktop"
 
