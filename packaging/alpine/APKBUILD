@@ -1,0 +1,33 @@
+# APKBUILD for KOKO WIDGET (Alpine Linux).
+#
+#   abuild -r
+
+pkgname=koko-widget
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Native Liquid Glass floating widget overlay"
+url="https://github.com/74mdi/koko-widget"
+arch="all"
+license="MIT"
+depends="gtk4.0 pango cairo glib"
+makedepends="cargo rust pkgconf gtk4.0-dev pango-dev cairo-dev"
+subpackages="$pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz"
+
+build() {
+	export CARGO_BUILD_JOBS=1
+	# Alpine does not package gtk4-layer-shell everywhere, so build the
+	# portable path and let the app fall back to a plain Wayland toplevel.
+	cargo build --release --no-default-features --frozen
+}
+
+package() {
+	install -Dm755 target/release/koko-widget "$pkgdir/usr/bin/koko-widget"
+	install -Dm644 data/io.github.kokowidget.KokoWidget.desktop \
+		"$pkgdir/usr/share/applications/io.github.kokowidget.KokoWidget.desktop"
+	for size in 16 24 32 48 64 128 256 512; do
+		install -Dm644 "assets/icons/hicolor/${size}x${size}/apps/io.github.kokowidget.KokoWidget.png" \
+			"$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/io.github.kokowidget.KokoWidget.png"
+	done
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+# debhelper compat 13
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	CARGO_BUILD_JOBS=1 dh_auto_build --release --all-features
+
+override_dh_auto_install:
+	install -Dm755 target/release/koko-widget debian/koko-widget/usr/bin/koko-widget
+	install -Dm644 data/io.github.kokowidget.KokoWidget.desktop \
+		debian/koko-widget/usr/share/applications/io.github.kokowidget.KokoWidget.desktop
+	for size in 16 24 32 48 64 128 256 512; do \
+		install -Dm644 "assets/icons/hicolor/$${size}x$${size}/apps/io.github.kokowidget.KokoWidget.png" \
+			"debian/koko-widget/usr/share/icons/hicolor/$${size}x$${size}/apps/io.github.kokowidget.KokoWidget.png"; \
+	done
+
+override_dh_auto_clean:
+	cargo clean || true

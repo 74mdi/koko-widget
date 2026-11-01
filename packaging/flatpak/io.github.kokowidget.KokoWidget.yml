@@ -1,0 +1,56 @@
+app-id: io.github.kokowidget.KokoWidget
+runtime: org.gnome.Platform
+runtime-version: "48"
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: koko-widget
+
+finish-args:
+  # The overlay is a Wayland layer surface; on X11 it is an EWMH dock window.
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  # MPRIS discovery and control happen over the session bus.
+  - --socket=session-bus
+  - --talk-name=org.mpris.MediaPlayer2.*
+  # Remote album artwork.
+  - --share=network
+  - --filesystem=xdg-config/koko-widget:create
+  - --filesystem=xdg-cache/koko-widget:create
+  # Autostart is an XDG entry the app writes itself.
+  - --filesystem=xdg-config/autostart:create
+
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  env:
+    CARGO_HOME: /run/build/koko-widget/cargo
+    CARGO_BUILD_JOBS: "1"
+
+modules:
+  - name: gtk4-layer-shell
+    buildsystem: meson
+    config-opts:
+      - -Dexamples=false
+      - -Dtests=false
+      - -Ddocs=false
+    sources:
+      - type: git
+        url: https://github.com/wmww/gtk4-layer-shell.git
+        tag: v1.1.0
+
+  - name: koko-widget
+    buildsystem: simple
+    build-commands:
+      - cargo build --release --frozen --all-features
+      - install -Dm755 target/release/koko-widget /app/bin/koko-widget
+      - install -Dm644 data/io.github.kokowidget.KokoWidget.desktop
+        /app/share/applications/io.github.kokowidget.KokoWidget.desktop
+      - |
+        for size in 16 24 32 48 64 128 256 512; do
+          install -Dm644 "assets/icons/hicolor/${size}x${size}/apps/io.github.kokowidget.KokoWidget.png" \
+            "/app/share/icons/hicolor/${size}x${size}/apps/io.github.kokowidget.KokoWidget.png"
+        done
+    sources:
+      - type: dir
+        path: ../..

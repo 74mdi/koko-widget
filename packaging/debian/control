@@ -1,0 +1,28 @@
+Source: koko-widget
+Section: sound
+Priority: optional
+Maintainer: 74mdi <7amdi@tuta.io>
+Build-Depends: debhelper-compat (= 13),
+               cargo,
+               rustc (>= 1.92),
+               libgtk-4-dev (>= 4.18),
+               libgtk4-layer-shell-dev,
+               libpango1.0-dev,
+               pkg-config
+Standards-Version: 4.7.0
+Homepage: https://github.com/74mdi/koko-widget
+Rules-Requires-Root: no
+
+Package: koko-widget
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Recommends: libgtk4-layer-shell0
+Description: Native Liquid Glass floating widget overlay
+ A floating, always-available widget layer for the Linux desktop. It shows
+ the currently playing track from any MPRIS-compliant player, the time, the
+ date and any text you want, each as an independent glass pill that can be
+ moved, resized and restyled.
+ .
+ Written in Rust with GTK4 and Cairo. No Electron, no Tauri, no WebView.
+ Layer-shell compositors get anchored surfaces; X11 uses EWMH dock windows.
