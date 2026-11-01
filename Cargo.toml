@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.92"
 license = "MIT"
-description = "A native, Liquid Glass inspired floating music overlay for Linux and FreeBSD"
+description = "Native Liquid Glass floating widget overlay: MPRIS music, clock, date and text as movable glass pills"
 categories = ["multimedia", "gui"]
 keywords = ["mpris", "wayland", "gtk4", "music", "overlay"]
 
