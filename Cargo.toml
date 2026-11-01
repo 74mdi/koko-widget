@@ -1,0 +1,44 @@
+[package]
+name = "koko-widget"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.92"
+license = "MIT"
+description = "A native, Liquid Glass inspired floating music overlay for Linux and FreeBSD"
+categories = ["multimedia", "gui"]
+keywords = ["mpris", "wayland", "gtk4", "music", "overlay"]
+
+[features]
+default = ["layer-shell"]
+layer-shell = ["dep:gtk4-layer-shell"]
+
+[dependencies]
+anyhow = "1.0"
+async-channel = "2.5"
+cairo-rs = { version = "0.22", features = ["png"] }
+clap = { version = "4.5", features = ["derive"] }
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+glib = "0.22"
+gtk = { package = "gtk4", version = "0.11", features = ["v4_18"] }
+gtk4-layer-shell = { version = "0.8", optional = true }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
+pango = "0.22"
+pangocairo = "0.22"
+serde = { version = "1.0", features = ["derive"] }
+sha2 = "0.10"
+thiserror = "2.0"
+tokio = { version = "1.48", features = ["rt", "sync", "time", "macros"] }
+toml = "0.9"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+ureq = { version = "3.5", default-features = false, features = ["rustls"] }
+x11rb = { version = "0.14", features = ["allow-unsafe-code"] }
+zbus = { version = "6.2", default-features = false, features = ["tokio", "proxy", "service"] }
+
+[dev-dependencies]
+tempfile = "3.23"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
